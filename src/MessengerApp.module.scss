@@ -1,0 +1,233 @@
+// Глобальное отключение выделения текста для этого компонента
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+// Разрешаем выделение только для input полей
+input, textarea {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+  cursor: text !important;
+}
+
+.app-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 20px;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 1.1rem;
+}
+
+.setup-container {
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #333;
+  font-weight: 500;
+}
+
+.input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  box-sizing: border-box;
+  
+  &:focus {
+    outline: none;
+    border-color: #667eea;
+  }
+}
+
+.button {
+  width: 100%;
+  padding: 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+  }
+}
+
+.back-button {
+  background: #6c757d;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  
+  &:hover {
+    background: #5a6268;
+  }
+}
+
+// Новые стили для комнатной системы
+.room-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+  
+  span {
+    color: #666;
+    font-size: 0.9rem;
+  }
+}
+
+.copy-link-button {
+  background: #28a745;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  
+  &:hover {
+    background: #218838;
+  }
+}
+
+.room-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+}
+
+.action-card {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 100%;
+  max-width: 400px;
+  
+  h3 {
+    color: #333;
+    margin-bottom: 0.5rem;
+    font-size: 1.3rem;
+  }
+  
+  p {
+    color: #666;
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+  }
+}
+
+.divider {
+  color: #999;
+  font-style: italic;
+  font-size: 1.1rem;
+  position: relative;
+  
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 50px;
+    height: 1px;
+    background: #ddd;
+  }
+  
+  &::before {
+    left: -70px;
+  }
+  
+  &::after {
+    right: -70px;
+  }
+}
+
+.primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  &:hover {
+    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
+  }
+}
+
+.secondary {
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  
+  &:hover {
+    background: linear-gradient(135deg, #218838 0%, #1ba085 100%);
+  }
+}
+
+// Адаптивность
+@media (max-width: 768px) {
+  .room-actions {
+    padding: 1rem;
+  }
+  
+  .action-card {
+    padding: 1.5rem;
+    max-width: none;
+  }
+  
+  .divider {
+    &::before,
+    &::after {
+      width: 30px;
+    }
+    
+    &::before {
+      left: -50px;
+    }
+    
+    &::after {
+      right: -50px;
+    }
+  }
+  
+  .room-info {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}

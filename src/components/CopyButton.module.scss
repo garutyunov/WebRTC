@@ -1,0 +1,98 @@
+.copy-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer !important;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  
+  // Обычное состояние
+  background: linear-gradient(135deg, #6c63ff, #5a54d9);
+  color: white;
+  
+  &:hover:not(.copied) {
+    background: linear-gradient(135deg, #5a54d9, #4b46c7);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+  }
+  
+  &:active:not(.copied) {
+    transform: translateY(0);
+  }
+  
+  // Состояние "скопировано"
+  &.copied {
+    background: linear-gradient(135deg, #28a745, #218838);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+  }
+  
+  // Размеры
+  &.small {
+    padding: 4px 8px;
+    font-size: 12px;
+    border-radius: 4px;
+    
+    .icon {
+      font-size: 12px;
+    }
+  }
+  
+  &.medium {
+    padding: 8px 12px;
+    font-size: 14px;
+    
+    .icon {
+      font-size: 14px;
+    }
+  }
+  
+  &.large {
+    padding: 12px 16px;
+    font-size: 16px;
+    border-radius: 8px;
+    
+    .icon {
+      font-size: 16px;
+    }
+  }
+}
+
+.icon {
+  display: inline-block;
+  transition: transform 0.3s ease;
+  
+  .copied & {
+    transform: scale(1.1);
+  }
+}
+
+.text {
+  white-space: nowrap;
+}
+
+// Мобильные устройства
+@media (max-width: 480px) {
+  .copy-button {
+    &.small {
+      padding: 6px 10px;
+      font-size: 12px;
+    }
+    
+    &.medium {
+      padding: 10px 14px;
+      font-size: 14px;
+    }
+    
+    &.large {
+      padding: 12px 18px;
+      font-size: 16px;
+    }
+  }
+}

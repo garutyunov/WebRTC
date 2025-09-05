@@ -1,0 +1,734 @@
+// Breakpoints for responsive design
+$mobile: 480px;
+$tablet: 768px;
+$desktop: 1024px;
+$large: 1440px;
+$xlarge: 1920px;
+
+// Глобальное отключение выделения текста
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: default;
+}
+
+// Разрешаем выделение только для input полей
+input, textarea {
+  -webkit-user-select: text !important;
+  -moz-user-select: text !important;
+  -ms-user-select: text !important;
+  user-select: text !important;
+  cursor: text !important;
+}
+
+// Incoming call overlay
+.incoming-call-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.incoming-call-modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  
+  h3 {
+    margin: 0 0 1rem 0;
+    color: #2c3e50;
+    font-size: 1.5rem;
+  }
+  
+  p {
+    margin: 0 0 2rem 0;
+    color: #34495e;
+    font-size: 1.1rem;
+  }
+}
+
+.incoming-call-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  
+  .control-button {
+    flex: 1;
+    max-width: 120px;
+  }
+}
+
+.accept {
+  background: linear-gradient(135deg, #27ae60, #2ecc71);
+  
+  &:hover {
+    background: linear-gradient(135deg, #229954, #27ae60);
+  }
+}
+
+// Room instructions
+.room-instructions {
+  background: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  
+  p {
+    margin: 0 0 0.5rem 0;
+    color: #495057;
+    font-weight: 500;
+  }
+  
+  ol {
+    margin: 0;
+    padding-left: 1.5rem;
+    color: #6c757d;
+    
+    li {
+      margin-bottom: 0.25rem;
+      line-height: 1.4;
+    }
+  }
+}
+
+// Video container styles
+.video-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+  max-width: 100%;
+  height: 100%;
+  
+  // Mobile: Single column
+  @media (max-width: $mobile) {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  // Tablet: Still single column for better UX
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+
+.video-wrapper {
+  position: relative;
+  background: transparent; // Убираем серый фон
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  
+  // Mobile
+  @media (max-width: $mobile) {
+    border-radius: 8px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  // Large screens
+  @media (min-width: $large) {
+    border-radius: 16px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+  }
+}
+
+.video {
+  width: 100%;
+  height: 300px;
+  object-fit: cover;
+  background: #333;
+  
+  // Mobile: Adaptive height with proper aspect ratio for vertical video
+  @media (max-width: $mobile) {
+    height: 400px; // Increased for mobile vertical video
+  }
+  
+  // Tablet: Medium height
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    height: 300px;
+  }
+  
+  // Large screens: Bigger height
+  @media (min-width: $large) {
+    height: 400px;
+  }
+  
+  // Extra large screens
+  @media (min-width: $xlarge) {
+    height: 500px;
+  }
+  
+  // Special styling for mobile cameras (9:16 aspect ratio)
+  &.mobile-camera {
+    @media (max-width: $mobile) {
+      height: 600px; // Tall for vertical mobile video
+      object-fit: contain; // Show full vertical video
+      background: #000;
+    }
+  }
+}
+
+.video-label {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  
+  // Mobile: Smaller label
+  @media (max-width: $mobile) {
+    font-size: 12px;
+    padding: 4px 8px;
+    top: 8px;
+    left: 8px;
+  }
+  
+  // Large screens: Bigger label
+  @media (min-width: $large) {
+    font-size: 16px;
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+}
+
+.connection-info {
+  text-align: center;
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  border: 1px solid #e9ecef;
+  max-width: 600px; // Ограничиваем ширину
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom: 20px;
+  
+  // Mobile: Smaller padding and margin
+  @media (max-width: $mobile) {
+    padding: 12px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    max-width: 100%; // На мобильных на всю ширину
+  }
+  
+  // Large screens: More padding
+  @media (min-width: $large) {
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    max-width: 700px; // Чуть шире на больших экранах
+  }
+  
+  h3 {
+    margin: 0 0 15px 0;
+    color: #333;
+    
+    @media (max-width: $mobile) {
+      font-size: 18px;
+      margin-bottom: 10px;
+    }
+    
+    @media (min-width: $large) {
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+  }
+  
+  > div {
+    margin-bottom: 10px;
+    
+    @media (max-width: $mobile) {
+      margin-bottom: 8px;
+    }
+    
+    @media (min-width: $large) {
+      margin-bottom: 15px;
+    }
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.peer-id-display {
+  font-family: monospace;
+  background: #e9ecef;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 10px auto; // Центрируем
+  word-break: break-all;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none; // Запрещаем выделение всего блока
+  cursor: default; // Обычный курсор для всего блока
+  max-width: 500px; // Ограничиваем ширину
+  
+  // Mobile: Smaller padding and font
+  @media (max-width: $mobile) {
+    padding: 8px;
+    font-size: 12px;
+    margin: 8px auto;
+    flex-direction: column;
+    gap: 8px;
+    max-width: 100%;
+  }
+  
+  // Large screens: More padding
+  @media (min-width: $large) {
+    padding: 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    max-width: 550px;
+  }
+  
+  span {
+    flex: 1;
+    margin-right: 10px;
+    user-select: text; // Только span можно выделить для копирования
+    cursor: text; // Текстовый курсор только для span
+    
+    @media (max-width: $mobile) {
+      margin-right: 0;
+      text-align: center;
+    }
+  }
+  
+  .copy-button {
+    margin-left: 10px;
+    padding: 4px 8px;
+    font-size: 12px;
+    background: #6c63ff;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer !important;
+    flex-shrink: 0;
+    -webkit-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+    
+    // Mobile: Larger touch target
+    @media (max-width: $mobile) {
+      padding: 8px 12px;
+      font-size: 14px;
+      margin-left: 0;
+    }
+    
+    // Large screens
+    @media (min-width: $large) {
+      padding: 6px 12px;
+      font-size: 14px;
+      border-radius: 6px;
+    }
+    
+    &:hover {
+      background: #5a54d9;
+    }
+    
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+}
+
+.peer-input {
+  width: 100%;
+  max-width: 500px; // Ограничиваем ширину поля ввода
+  margin: 5px auto 0; // Центрируем
+  display: block;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  font-family: monospace;
+  font-size: 14px;
+  box-sizing: border-box;
+  
+  // Mobile: Better touch target
+  @media (max-width: $mobile) {
+    padding: 12px;
+    font-size: 16px; // Prevent zoom on iOS
+    max-width: 100%;
+  }
+  
+  // Large screens
+  @media (min-width: $large) {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    max-width: 550px;
+  }
+  
+  &:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+  }
+  
+  &:disabled {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+  
+  &::placeholder {
+    color: #6c757d;
+    font-style: italic;
+  }
+}
+
+.status-indicator {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-right: 8px;
+  
+  &.connected {
+    background-color: #28a745;
+  }
+  
+  &.disconnected {
+    background-color: #dc3545;
+  }
+}
+
+.controls-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  
+  // Mobile: Stack buttons or increase spacing
+  @media (max-width: $mobile) {
+    gap: 15px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+  }
+  
+  // Large screens: More space
+  @media (min-width: $large) {
+    gap: 20px;
+    margin-top: 30px;
+  }
+}
+
+.control-button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer !important;
+  font-size: 14px;
+  transition: all 0.2s ease;
+  background-color: #6c63ff;
+  color: white;
+  min-width: 120px;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  
+  // Mobile: Larger touch target
+  @media (max-width: $mobile) {
+    padding: 12px 24px;
+    font-size: 16px;
+    min-width: 140px;
+    border-radius: 8px;
+  }
+  
+  // Tablet
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    padding: 12px 20px;
+    font-size: 15px;
+  }
+  
+  // Large screens
+  @media (min-width: $large) {
+    padding: 12px 30px;
+    font-size: 16px;
+    min-width: 150px;
+    border-radius: 8px;
+  }
+  
+  &:hover {
+    background-color: #5a54d9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+  }
+  
+  &.danger {
+    background-color: #dc3545;
+    
+    &:hover {
+      background-color: #c82333;
+      box-shadow: 0 4px 12px rgba(220, 53, 69, 0.3);
+    }
+  }
+}
+
+// Минимальный режим
+.connection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  
+  h3 {
+    margin: 0;
+  }
+}
+
+.minimal-mode-toggle {
+  padding: 6px 12px;
+  background: linear-gradient(135deg, #6c63ff, #5a54d9);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer !important;
+  font-size: 12px;
+  transition: all 0.3s ease;
+  -webkit-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+  
+  &:hover {
+    background: linear-gradient(135deg, #5a54d9, #4b46c7);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(108, 99, 255, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+  
+  @media (max-width: $mobile) {
+    padding: 8px 14px;
+    font-size: 13px;
+  }
+}
+
+/* Top panel styles */
+.top-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 8px;
+  font-size: 13px;
+  min-height: 36px;
+  margin-bottom: 10px;
+}
+
+.panel-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 0 0 auto;
+  min-width: 120px;
+}
+
+.panel-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 250px;
+}
+
+.panel-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+  min-width: 80px;
+}
+
+.room-id {
+  font-weight: 600;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
+.status-section {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  
+  &.connected {
+    background-color: #4CAF50;
+    box-shadow: 0 0 4px rgba(76, 175, 80, 0.5);
+  }
+  
+  &.disconnected {
+    background-color: #ff9800;
+    box-shadow: 0 0 4px rgba(255, 152, 0, 0.5);
+  }
+}
+
+.status-text {
+  font-size: 11px;
+  opacity: 0.9;
+}
+
+.call-section {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-right: 12px;
+}
+
+.target-input {
+  padding: 4px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+  font-size: 12px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+  width: 120px;
+  
+  &::placeholder {
+    color: #666;
+  }
+}
+
+.call-button {
+  background: rgba(76, 175, 80, 0.8);
+  border: 1px solid rgba(76, 175, 80, 1);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover:not(:disabled) {
+    background: rgba(76, 175, 80, 1);
+    transform: translateY(-1px);
+  }
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.quick-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.exit-button {
+  background: rgba(244, 67, 54, 0.8);
+  border: 1px solid rgba(244, 67, 54, 1);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: rgba(244, 67, 54, 1);
+    transform: translateY(-1px);
+  }
+}
+
+.exit-room-button {
+  background: rgba(255, 152, 0, 0.8);
+  border: 1px solid rgba(255, 152, 0, 1);
+  color: white;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: rgba(255, 152, 0, 1);
+    transform: translateY(-1px);
+  }
+}
+
+/* Фиксированная кнопка скрытия интерфейса */
+.fixed-controls {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  z-index: 200;
+}
+
+.minimal-toggle {
+  background: rgba(102, 126, 234, 0.9);
+  border: 1px solid rgba(102, 126, 234, 1);
+  color: white;
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  
+  &:hover {
+    background: rgba(102, 126, 234, 1);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+}
+
+.connect-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.2);
+  border-radius: 6px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  gap: 12px;
+  
+  span {
+    color: #5a67d8;
+    font-weight: 500;
+  }
+}
