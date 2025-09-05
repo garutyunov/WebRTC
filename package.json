@@ -13,6 +13,7 @@
   },
   "homepage": "https://yourusername.github.io/messenger",
   "dependencies": {
+    "messenger": "link:",
     "peerjs": "^1.5.5",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
