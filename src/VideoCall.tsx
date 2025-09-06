@@ -26,10 +26,7 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
   const callRef = useRef<any>(null);
 
   useEffect(() => {
-    // Проверяем, есть ли в URL параметр peerId (значит мы присоединяемся к комнате)
-    const urlParams = new URLSearchParams(window.location.search);
-    const targetPeerIdFromUrl = urlParams.get('peerId');
-    
+    // Новая логика с query параметрами - room ID передается через props
     let userPeerId: string;
     
     if (isCreator) {
@@ -37,18 +34,14 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
       userPeerId = roomId;
       console.log('🏠 Creating room, using roomId as Peer ID:', userPeerId);
       setIsSecondUser(false);
-    } else if (targetPeerIdFromUrl) {
-      // Мы присоединяемся к комнате через полную ссылку с peerId - создаем новый ID для себя
+    } else {
+      // Мы присоединяемся к комнате - создаем новый ID для себя
       userPeerId = `${roomId}-user-${Math.random().toString(36).substr(2, 6)}`;
       setIsSecondUser(true);
       
       // Автоматически заполняем поле для подключения к создателю комнаты
-      setTargetPeerId(targetPeerIdFromUrl);
-    } else {
-      // Мы присоединяемся к комнате через ссылку, но без peerId - значит это второй пользователь
-      userPeerId = `${roomId}-user-${Math.random().toString(36).substr(2, 6)}`;
-      setIsSecondUser(true);
-      
+      // roomId теперь равен ID создателя комнаты
+      setTargetPeerId(roomId);
     }
     
     const newPeer = new Peer(userPeerId);
@@ -58,8 +51,8 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
       setMyPeerId(id);
       console.log('✅ My peer ID is:', id);
       
-      // Если мы второй пользователь и еще не знаем ID создателя, попробуем найти его
-      if (!isCreator && !targetPeerIdFromUrl) {
+      // Если мы второй пользователь, автоматически подключаемся к создателю
+      if (!isCreator) {
         console.log('🔍 Looking for room creator with ID:', roomId);
         // Пробуем подключиться к создателю комнаты (его ID = roomId)
         setTimeout(() => {
@@ -238,12 +231,18 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
   // Обновляем URL когда пользователь готов к звонку (только для создателя комнаты)
   useEffect(() => {
     if (myPeerId && isReady && isCreator) {
-      // Только создатель комнаты обновляет URL со своим Peer ID
+      // URL уже должен содержать room параметр, убеждаемся что он правильный
       const currentUrl = window.location.origin + window.location.pathname;
-      const newUrl = `${currentUrl}?peerId=${myPeerId}`;
+      const newUrl = `${currentUrl}?room=${roomId}`;
       window.history.replaceState({}, '', newUrl);
     }
-  }, [myPeerId, isReady, isCreator]);
+  }, [myPeerId, isReady, isCreator, roomId]);
+
+  // Функция для получения ссылки комнаты
+  const getRoomLink = (): string => {
+    const currentUrl = window.location.origin + window.location.pathname;
+    return `${currentUrl}?room=${roomId}`;
+  };
 
   return (
     <>
@@ -306,10 +305,19 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
           )}
           {myPeerId && (
             <div className={styles['quick-actions']}>
+              {isCreator && (
+                <CopyButton
+                  text={getRoomLink()}
+                  buttonText="Копировать ссылку комнаты"
+                  copiedText="Ссылка скопирована"
+                  copyKey="room-link"
+                  size="small"
+                />
+              )}
               <CopyButton
                 text={myPeerId}
                 buttonText="Копировать ID"
-                copiedText="Скопированно"
+                copiedText="ID скопирован"
                 copyKey="peer-id"
                 size="small"
               />

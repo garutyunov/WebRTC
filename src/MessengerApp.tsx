@@ -9,11 +9,11 @@ const MessengerApp: React.FC = () => {
   const [isCreator, setIsCreator] = useState(false);
 
   useEffect(() => {
-    // Получаем roomId из URL если есть
-    const urlPath = window.location.pathname;
-    const urlRoomId = urlPath.split('/').pop();
+    // Получаем roomId из query параметров URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlRoomId = urlParams.get('room');
     
-    if (urlRoomId && urlRoomId !== '' && urlRoomId !== 'messenger') {
+    if (urlRoomId && urlRoomId.trim() !== '') {
       setRoomId(urlRoomId);
       setJoinRoomId(urlRoomId);
       setIsInRoom(true);
@@ -28,8 +28,9 @@ const MessengerApp: React.FC = () => {
     setIsInRoom(true);
     setIsCreator(true); // Устанавливаем что мы создатель
     
-    // Обновляем URL без перезагрузки страницы
-    window.history.pushState({}, '', `/${newPeerId}`);
+    // Обновляем URL с query параметром без перезагрузки страницы
+    const newUrl = `${window.location.pathname}?room=${newPeerId}`;
+    window.history.pushState({}, '', newUrl);
   };
 
   const joinRoom = () => {
@@ -38,8 +39,9 @@ const MessengerApp: React.FC = () => {
       setIsInRoom(true);
       setIsCreator(false); // Устанавливаем что мы присоединяемся
       
-      // Обновляем URL без перезагрузки страницы
-      window.history.pushState({}, '', `/${joinRoomId.trim()}`);
+      // Обновляем URL с query параметром без перезагрузки страницы
+      const newUrl = `${window.location.pathname}?room=${joinRoomId.trim()}`;
+      window.history.pushState({}, '', newUrl);
     }
   };
 
@@ -49,8 +51,8 @@ const MessengerApp: React.FC = () => {
     setJoinRoomId('');
     setIsCreator(false); // Сбрасываем статус создателя
     
-    // Возвращаемся на главную страницу
-    window.history.pushState({}, '', '/');
+    // Возвращаемся на главную страницу без query параметров
+    window.history.pushState({}, '', window.location.pathname);
   };
 
   if (isInRoom) {
