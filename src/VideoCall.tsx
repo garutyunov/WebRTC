@@ -20,6 +20,10 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
   const [isReady, setIsReady] = useState(false);
   const [isSecondUser, setIsSecondUser] = useState(false);
   
+  // Новые состояния для aspect ratio
+  const [myVideoAspectRatio, setMyVideoAspectRatio] = useState<'landscape' | 'portrait' | 'square'>('landscape');
+  const [remoteVideoAspectRatio, setRemoteVideoAspectRatio] = useState<'landscape' | 'portrait' | 'square'>('landscape');
+  
   const myVideoRef = useRef<HTMLVideoElement>(null);
   const remoteVideoRef = useRef<HTMLVideoElement>(null);
   const myStreamRef = useRef<MediaStream | null>(null);
@@ -73,6 +77,35 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
     };
   }, [roomId, isCreator]);
 
+  // Функция для определения aspect ratio видео
+  const detectVideoAspectRatio = (video: HTMLVideoElement): 'landscape' | 'portrait' | 'square' => {
+    const { videoWidth, videoHeight } = video;
+    
+    if (videoWidth === 0 || videoHeight === 0) {
+      return 'landscape'; // По умолчанию
+    }
+    
+    const aspectRatio = videoWidth / videoHeight;
+    
+    if (aspectRatio > 1.1) {
+      return 'landscape'; // Горизонтальное видео
+    } else if (aspectRatio < 0.9) {
+      return 'portrait'; // Вертикальное видео (мобильная камера)
+    } else {
+      return 'square'; // Квадратное видео
+    }
+  };
+
+  // Обработчик загрузки метаданных видео для определения aspect ratio
+  const handleVideoLoadedMetadata = (
+    video: HTMLVideoElement, 
+    setAspectRatio: (ratio: 'landscape' | 'portrait' | 'square') => void
+  ) => {
+    const ratio = detectVideoAspectRatio(video);
+    setAspectRatio(ratio);
+    console.log(`📺 Video aspect ratio detected: ${ratio} (${video.videoWidth}x${video.videoHeight})`);
+  };
+
   const acceptCall = async () => {
     if (!incomingCall) return;
     
@@ -101,6 +134,13 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
       
       if (myVideoRef.current) {
         myVideoRef.current.srcObject = stream;
+        
+        // Добавляем обработчик для определения aspect ratio нашего видео
+        myVideoRef.current.onloadedmetadata = () => {
+          if (myVideoRef.current) {
+            handleVideoLoadedMetadata(myVideoRef.current, setMyVideoAspectRatio);
+          }
+        };
       }
       
       incomingCall.answer(stream);
@@ -110,6 +150,13 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
       incomingCall.on('stream', (remoteStream: MediaStream) => {
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = remoteStream;
+          
+          // Добавляем обработчик для определения aspect ratio удаленного видео
+          remoteVideoRef.current.onloadedmetadata = () => {
+            if (remoteVideoRef.current) {
+              handleVideoLoadedMetadata(remoteVideoRef.current, setRemoteVideoAspectRatio);
+            }
+          };
         }
         setConnected(true);
       });
@@ -146,6 +193,13 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
       call.on('stream', (remoteStream) => {
         if (remoteVideoRef.current) {
           remoteVideoRef.current.srcObject = remoteStream;
+          
+          // Добавляем обработчик для определения aspect ratio удаленного видео
+          remoteVideoRef.current.onloadedmetadata = () => {
+            if (remoteVideoRef.current) {
+              handleVideoLoadedMetadata(remoteVideoRef.current, setRemoteVideoAspectRatio);
+            }
+          };
         }
         setConnected(true);
         setInCall(true);
@@ -190,6 +244,13 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
       
       if (myVideoRef.current) {
         myVideoRef.current.srcObject = stream;
+        
+        // Добавляем обработчик для определения aspect ratio
+        myVideoRef.current.onloadedmetadata = () => {
+          if (myVideoRef.current) {
+            handleVideoLoadedMetadata(myVideoRef.current, setMyVideoAspectRatio);
+          }
+        };
       }
       
       setIsReady(true);
@@ -354,14 +415,18 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
         )}
       </div>
 
-      <div className={styles['video-container']}>
+      <div className={`${styles['video-container']} ${
+        myVideoAspectRatio === 'portrait' || remoteVideoAspectRatio === 'portrait' 
+          ? styles['has-portrait-video'] 
+          : ''
+      }`}>
         <div className={styles['video-wrapper']}>
           <video
             ref={myVideoRef}
             autoPlay
             muted
             playsInline
-            className={styles.video}
+            className={`${styles.video} ${styles[`video-${myVideoAspectRatio}`]}`}
           />
           <div className={styles['video-label']}>Вы</div>
         </div>
@@ -371,7 +436,7 @@ const VideoCall: React.FC<VideoCallProps> = ({ roomId, isCreator = false }) => {
             ref={remoteVideoRef}
             autoPlay
             playsInline
-            className={styles.video}
+            className={`${styles.video} ${styles[`video-${remoteVideoAspectRatio}`]}`}
           />
           <div className={styles['video-label']}>Собеседник</div>
         </div>

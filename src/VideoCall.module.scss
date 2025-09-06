@@ -123,6 +123,23 @@ input, textarea {
     grid-template-columns: 1fr;
     gap: 15px;
   }
+  
+  // Специальная адаптация для портретных видео
+  &.has-portrait-video {
+    @media (max-width: $tablet) {
+      grid-template-columns: 1fr;
+      gap: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    @media (min-width: #{$tablet + 1px}) {
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  }
 }
 
 .video-wrapper {
@@ -178,6 +195,59 @@ input, textarea {
       object-fit: contain; // Show full vertical video
       background: #000;
     }
+  }
+}
+
+// Новые стили для разных aspect ratio
+.video-portrait {
+  // Портретное видео (вертикальное, например с мобильной камеры)
+  object-fit: contain !important;
+  background: #000 !important;
+  
+  @media (max-width: $mobile) {
+    height: 500px; // Высокое для вертикального видео
+  }
+  
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    height: 400px;
+  }
+  
+  @media (min-width: #{$tablet + 1px}) {
+    height: 450px;
+  }
+  
+  @media (min-width: $large) {
+    height: 500px;
+  }
+}
+
+.video-landscape {
+  // Горизонтальное видео (обычные веб-камеры)
+  object-fit: cover;
+  // Используем стандартные высоты из базового .video класса
+}
+
+.video-square {
+  // Квадратное видео
+  object-fit: cover;
+  aspect-ratio: 1 / 1;
+  
+  @media (max-width: $mobile) {
+    height: 280px;
+    width: 280px;
+    margin: 0 auto;
+  }
+  
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    height: 300px;
+    width: 300px;
+    margin: 0 auto;
+  }
+  
+  @media (min-width: #{$tablet + 1px}) {
+    height: 350px;
+    width: 350px;
+    margin: 0 auto;
   }
 }
 
@@ -549,6 +619,22 @@ input, textarea {
   font-size: 13px;
   min-height: 36px;
   margin-bottom: 10px;
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px 8px;
+    min-height: auto;
+    font-size: 12px;
+  }
+  
+  // Планшетная адаптация
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    padding: 8px 10px;
+    font-size: 12px;
+    min-height: 32px;
+  }
 }
 
 .panel-left {
@@ -557,6 +643,21 @@ input, textarea {
   gap: 12px;
   flex: 0 0 auto;
   min-width: 120px;
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    width: 100%;
+    justify-content: space-between;
+    min-width: auto;
+    gap: 8px;
+    order: 1;
+  }
+  
+  // Планшетная адаптация
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    min-width: 100px;
+    gap: 8px;
+  }
 }
 
 .panel-center {
@@ -566,6 +667,21 @@ input, textarea {
   gap: 8px;
   flex: 1;
   max-width: 250px;
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    width: 100%;
+    max-width: none;
+    flex-direction: column;
+    gap: 6px;
+    order: 2;
+  }
+  
+  // Планшетная адаптация
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    max-width: 200px;
+    gap: 6px;
+  }
 }
 
 .panel-right {
@@ -575,12 +691,35 @@ input, textarea {
   flex: 0 0 auto;
   justify-content: flex-end;
   min-width: 80px;
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    width: 100%;
+    justify-content: center;
+    min-width: auto;
+    order: 3;
+  }
+  
+  // Планшетная адаптация
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    min-width: 60px;
+    gap: 4px;
+  }
 }
 
 .room-id {
   font-weight: 600;
   font-size: 12px;
   opacity: 0.9;
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+  }
 }
 
 .status-section {
@@ -608,6 +747,11 @@ input, textarea {
 .status-text {
   font-size: 11px;
   opacity: 0.9;
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    font-size: 10px;
+  }
 }
 
 .call-section {
@@ -615,6 +759,14 @@ input, textarea {
   align-items: center;
   gap: 6px;
   margin-right: 12px;
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    width: 100%;
+    margin-right: 0;
+    gap: 4px;
+    justify-content: center;
+  }
 }
 
 .target-input {
@@ -628,6 +780,19 @@ input, textarea {
   
   &::placeholder {
     color: #666;
+  }
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    width: 100px;
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+  
+  // Планшетная адаптация
+  @media (min-width: #{$mobile + 1px}) and (max-width: $tablet) {
+    width: 100px;
+    font-size: 11px;
   }
 }
 
@@ -650,11 +815,26 @@ input, textarea {
     opacity: 0.5;
     cursor: not-allowed;
   }
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    padding: 6px 10px;
+    font-size: 11px;
+    min-width: 40px;
+  }
 }
 
 .quick-actions {
   display: flex;
   gap: 6px;
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    width: 100%;
+    justify-content: center;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
 }
 
 .exit-button {
@@ -670,6 +850,13 @@ input, textarea {
   &:hover {
     background: rgba(244, 67, 54, 1);
     transform: translateY(-1px);
+  }
+  
+  // Мобильная адаптация
+  @media (max-width: $mobile) {
+    padding: 6px 10px;
+    font-size: 11px;
+    min-width: 50px;
   }
 }
 
